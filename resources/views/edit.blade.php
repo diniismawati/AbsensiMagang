@@ -18,11 +18,9 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
-        <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <form action="{{ route('admin.user.update',['id' => $data->id]) }}" method="POST">
+                <form action="{{ route('admin.user.update',['id' => $data->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
               <div class="row">
@@ -37,6 +35,18 @@
                     <!-- form start -->
                     <form>
                       <div class="card-body">
+                        @if($data->image)
+                            <img src="{{ asset('storage/photo-user/'.$data->image) }}" width="100" height="100px" alt="">
+                        @endif
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Photo</label>
+                            <input type="file" name="photo" class="form-control" id="exampleInputEmail1">
+                            <small>Upload photo jika ingin menggantinya</small>
+                            @error('photo')
+                            <br>
+                                <small>{{$message}}</small>
+                            @enderror
+                          </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email" value="{{ $data->email }}">

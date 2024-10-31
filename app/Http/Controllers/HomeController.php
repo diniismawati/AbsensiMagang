@@ -49,7 +49,7 @@ class HomeController extends Controller
 
         User::create($data);
 
-        return redirect()->route('admin.index'); //data masuk, tapi tidak langsung menempilkan halaman index user (halaman error)
+        return redirect()->route('admin.index');
     }
 
     public function edit(Request $request, $id){
@@ -63,9 +63,12 @@ class HomeController extends Controller
             'email'    => 'required|email',
             'nama'     => 'required',
             'password' => 'nullable',
+            'photo'    => 'nullable|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         if($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
+
+        $find = User::find($id);
 
         $data['email']    = $request->email;
         $data['name']     = $request->nama;
@@ -74,9 +77,25 @@ class HomeController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        User::whereId($id)->update($data);
+        $photo      = $request->file('photo');
 
-        return redirect()->route('admin.index'); //data terupdate, tapi tidak langsung menempilkan halaman index user (halaman error)
+        if($photo){
+
+            $filename   = date('Y-m-d').$photo->getClientOriginalName();
+            $path       = 'photo-user/'.$filename;
+
+            if($find->image) {
+                Storage::disk('public')->delete('photo-user/'. $find->image);
+            }
+
+            Storage::disk('public')->put($path,file_get_contents($photo));
+
+            $data['image']      = $filename;
+        }
+
+        $find->update($data);
+
+        return redirect()->route('admin.index');
     }
 
     public function delete(Request $request, $id){
@@ -85,6 +104,6 @@ class HomeController extends Controller
         if($data){
             $data->delete();
         }
-        return redirect()->route('admin.index'); //data terhapus, tapi tidak langsung menempilkan halaman index user (halaman error)
+        return redirect()->route('admin.index');
     }
 }
