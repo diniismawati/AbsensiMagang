@@ -22,7 +22,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <form action="{{ route('user.store')}}" method="POST">
+                <form action="{{ route('admin.user.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
               <div class="row">
                 <!-- left column -->
@@ -35,30 +35,37 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form>
-                      <div class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Photo Profil</label>
+                            <input type="file" name="photo" class="form-control" id="exampleInputEmail1" >
+                            @error('photo')
+                                <small>{{$message}}</small>
+                            @enderror
+                        </div>
+                        <div class="card-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
                             @error('email')
                                 <small>{{$message}}</small>
                             @enderror
-                          </div>
+                        </div>
                         <div class="form-group">
-                          <label for="exampleInputEmail1">Nama</label>
-                          <input type="text" name="nama" class="form-control" id="exampleInputEmail1" placeholder="Nama">
-                          @error('nama')
+                            <label for="exampleInputEmail1">Nama</label>
+                            <input type="text" name="nama" class="form-control" id="exampleInputEmail1" placeholder="Nama">
+                            @error('nama')
                                 <small>{{$message}}</small>
                             @enderror
                         </div>
                         <div class="form-group">
-                          <label for="exampleInputPassword1">Password</label>
-                          <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                          @error('password')
+                            <label label for="exampleInputPassword1">Password</label>
+                            <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            @error('password')
                                 <small>{{$message}}</small>
                             @enderror
                         </div>
-                      </div>
-                      <!-- /.card-body -->
+                        </div>
+                        <!-- /.card-body -->
 
                       <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Submit</button>
